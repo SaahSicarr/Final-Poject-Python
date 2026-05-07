@@ -80,9 +80,6 @@ def poly_to_str(coeffs):
     return " + ".join(terms) if terms else "0"
 
 
-# ──────────────────────────────────────────────
-# Natural Cubic Spline Interpolation
-# ──────────────────────────────────────────────
 
 def cubic_spline(x, y):
     """Compute natural cubic spline coefficients.
@@ -286,10 +283,6 @@ def plot_compare(dates, prices, x, results, output_path):
     plt.close()
 
 
-# ──────────────────────────────────────────────
-# Main
-# ──────────────────────────────────────────────
-
 def main():
     parser = argparse.ArgumentParser(description='Stock/Crypto Price Predictor')
     parser.add_argument('csv_file', help='CSV file with date and price columns')
@@ -329,7 +322,6 @@ def main():
         print(f"Plot saved to {args.output}")
 
     else:
-        # single fit mode
         coeffs = polyfit(x, prices, args.degree)
         y_pred = poly_eval(coeffs, x)
         r2 = r_squared(prices, y_pred)
@@ -337,11 +329,9 @@ def main():
         print(f"Fit equation: {poly_to_str(coeffs)}")
         print(f"R\u00B2 = {r2:.6f}")
 
-        # spline
         a, b, c, d = cubic_spline(x, prices)
         spline_data = (x, a, b, c, d)
 
-        # forecast
         if args.forecast > 0:
             x_fore = np.linspace(x[-1] + 1, x[-1] + args.forecast, args.forecast)
             y_fore = poly_eval(coeffs, x_fore)
