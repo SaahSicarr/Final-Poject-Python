@@ -1,6 +1,5 @@
 """
 Tests for Stock/Crypto Price Predictor
-Covers requirements R1–R7
 """
 
 import os
@@ -14,8 +13,6 @@ from price_predictor import (
     cubic_spline, spline_eval, load_csv
 )
 
-
-# ── Helpers ──
 
 def make_csv(filepath, dates, prices, date_col='Date', price_col='Close'):
     with open(filepath, 'w', newline='') as f:
@@ -44,7 +41,7 @@ def linear_csv(tmp_path):
     x = np.arange(30, dtype=float)
     prices = 2.0 * x + 5.0 + np.random.normal(0, 0.2, 30)
     make_csv(filepath, dates, prices)
-    return str(filepath), 2.0, 5.0  # true slope, true intercept
+    return str(filepath), 2.0, 5.0 
 
 
 @pytest.fixture
@@ -71,7 +68,7 @@ def large_csv(tmp_path):
     return str(filepath)
 
 
-# ── R1: Regression accuracy on linear data ──
+#  Regression accuracy on linear data
 
 def test_r1_regression_linear(linear_csv):
     filepath, true_slope, true_intercept = linear_csv
@@ -84,7 +81,7 @@ def test_r1_regression_linear(linear_csv):
     assert abs(coeffs[0] - true_intercept) < 0.5, f"Intercept {coeffs[0]:.4f} not within 0.5 of {true_intercept}"
 
 
-# ── R2: Spline passes through all data points ──
+# Spline passes through all data points 
 
 def test_r2_spline_passthrough(tmp_csv):
     dates, prices = load_csv(tmp_csv)
@@ -97,7 +94,7 @@ def test_r2_spline_passthrough(tmp_csv):
             f"Spline mismatch at point {i}: {y_at_knots[i]:.12f} vs {prices[i]:.12f}"
 
 
-# ── R3: R² matches NumPy ──
+# R^2 matches NumPy 
 
 def test_r3_r2_matches_numpy(tmp_csv):
     dates, prices = load_csv(tmp_csv)
@@ -116,7 +113,7 @@ def test_r3_r2_matches_numpy(tmp_csv):
             f"Degree {deg}: our R²={our_r2:.6f} vs NumPy R²={np_r2:.6f}"
 
 
-# ── R4: Quadratic dataset gets R² > 0.999 ──
+# Quadratic dataset gets R² > 0.999
 
 def test_r4_quadratic_fit(quadratic_csv):
     filepath = quadratic_csv
@@ -129,7 +126,7 @@ def test_r4_quadratic_fit(quadratic_csv):
     assert r2 > 0.999, f"R² = {r2:.6f}, expected > 0.999"
 
 
-# ── R5: Processing speed ──
+# Processing speed
 
 def test_r5_performance(large_csv):
     filepath = large_csv
@@ -147,7 +144,7 @@ def test_r5_performance(large_csv):
     assert elapsed < 2.0, f"Processing took {elapsed:.2f}s, expected < 2s"
 
 
-# ── R6: No crash on valid input ──
+# No crash on valid input
 
 def test_r6_no_crash(tmp_csv, tmp_path):
     output = str(tmp_path / "test_output.png")
@@ -161,7 +158,7 @@ def test_r6_no_crash(tmp_csv, tmp_path):
     assert 'R²' in result.stdout or 'R\u00b2' in result.stdout, "R² not printed"
 
 
-# ── R7: Compare mode picks best degree ──
+# Compare mode picks best degree
 
 def test_r7_compare_mode(quadratic_csv, tmp_path):
     filepath = quadratic_csv
