@@ -28,7 +28,6 @@ def polyfit(x, y, degree):
 
 
 def gauss_solve(A, b):
-    """Solve Ax = b using Gaussian elimination with partial pivoting."""
     n = len(b)
     M = np.hstack([A.astype(float), b.reshape(-1, 1).astype(float)])
 
@@ -49,7 +48,6 @@ def gauss_solve(A, b):
 
 
 def poly_eval(coeffs, x):
-    """Evaluate polynomial with given coefficients at x."""
     result = np.zeros_like(x, dtype=float)
     for j, c in enumerate(coeffs):
         result += c * x ** j
@@ -66,7 +64,6 @@ def r_squared(y_true, y_pred):
 
 
 def poly_to_str(coeffs):
-    """Format polynomial as readable string."""
     terms = []
     for j, c in enumerate(coeffs):
         if abs(c) < 1e-12:
@@ -82,10 +79,6 @@ def poly_to_str(coeffs):
 
 
 def cubic_spline(x, y):
-    """Compute natural cubic spline coefficients.
-    Returns (a, b, c, d) arrays where each segment i is:
-      S_i(t) = a[i] + b[i](t - x[i]) + c[i](t - x[i])^2 + d[i](t - x[i])^3
-    """
     n = len(x) - 1
     h = np.diff(x)
     a = y.copy()
@@ -119,7 +112,6 @@ def cubic_spline(x, y):
 
 
 def tridiag_solve(lower, diag, upper, rhs):
-    """Solve tridiagonal system using Thomas algorithm."""
     n = len(diag)
     c = np.zeros(n)
     d = np.zeros(n)
@@ -142,7 +134,6 @@ def tridiag_solve(lower, diag, upper, rhs):
 
 
 def spline_eval(x_knots, a, b, c, d, x_eval):
-    """Evaluate cubic spline at given x values."""
     y_eval = np.zeros_like(x_eval, dtype=float)
     n = len(a)
 
@@ -157,7 +148,6 @@ def spline_eval(x_knots, a, b, c, d, x_eval):
 
 
 def load_csv(filepath):
-    """Load CSV with date and price columns. Returns (dates, prices)."""
     dates = []
     prices = []
 
